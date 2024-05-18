@@ -2,7 +2,11 @@
 @{ 
     ViewData["Title"] = "HTMX - Kitchen Sink";
 }
-<h1>Hello World!</h1>
+<form hx-post="/setup/yourname" hx-swap="none">
+    <label>What is your name?</label>
+    <input name="Name" type="text" />
+    <input type="submit" value="Submit" />
+</form>
 
 <div hx-get="/messages">
     Click me! I am a clickable div that triggers a GET request.
