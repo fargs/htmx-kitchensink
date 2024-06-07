@@ -7,8 +7,4 @@
     <RootNamespace>htmx_kitchensink</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
 </Project>

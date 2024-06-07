@@ -23,5 +23,8 @@ app.MapPost("/setup/yourname", async (context) =>
 });
 
 app.UseStaticFiles();
+app.MapControllers();
 app.MapRazorPages();
+app.UseRouting();
+
 app.Run();
