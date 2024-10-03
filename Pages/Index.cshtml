@@ -1,17 +1,44 @@
-﻿@page
-@{ 
+﻿@page "/workitems"
+
+@model htmx_kitchensink.Pages.IndexPage
+@{
+    var listContainer = "list-container";
+    var readOnlyContainer = "readonly-container";
     ViewData["Title"] = "HTMX - Kitchen Sink";
 }
-<form hx-post="/setup/yourname" hx-swap="none">
-    <label>What is your name?</label>
-    <input name="Name" type="text" />
-    <input type="submit" value="Submit" />
-</form>
 
-<div hx-get="/messages">
-    Click me! I am a clickable div that triggers a GET request.
+<partial name="@htmx_kitchensink.Partials.WorkItem.NewPartial.PartialName" model="@Model.NewPartial" />
+
+<div id="@listContainer">
+    <partial name="@htmx_kitchensink.Partials.WorkItem.ListPartial.PartialName" model="@Model.ListPartial" />
+</div>
+
+<div id="@readOnlyContainer">
+    <partial name="@htmx_kitchensink.Partials.WorkItem.ReadOnlyPartial.PartialName" model="@Model.ReadOnlyPartial" />
 </div>
 
 @section Scripts {
     <script src="~/lib/htmx/htmx.min.js"></script>
+
+    <script type="text/javascript">
+        document.body.addEventListener('workItemCreated', function (event) {
+
+            var data = event.detail; // Access the links from the event detail
+
+            console.log("ReadOnly Link:", data.readOnlyLink);
+            console.log("Created Id:", data.createdId);
+
+            history.pushState(null, "", "/workitems/" + data.createdId)
+
+            fetch(data.readOnlyLink)
+                .then(response => response.text())
+                .then(html => {
+                    // Insert the fetched HTML into the partial container
+                    document.getElementById('@readOnlyContainer').innerHTML = html;
+                })
+                .catch(error => {
+                    console.error('Error fetching the partial:', error);
+                });
+            });
+    </script>
 }

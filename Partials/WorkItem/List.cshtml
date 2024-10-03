@@ -1,0 +1,27 @@
+﻿@model ListPartial
+
+<div id="workitem-list" class="container-fluid">
+    <h2>Work Items</h2>
+    <h5>@DateTime.UtcNow.ToLocalTime()</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListItems)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>
+                        <a href="@item.ReadOnlyLink" class="btn btn-primary">View</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

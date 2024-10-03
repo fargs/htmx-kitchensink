@@ -18,6 +18,7 @@ app.MapPost("/setup/yourname", async (context) =>
         xmlSerializer.Serialize(writer, name);
     }
 
+
     // Return 200 OK
     context.Response.StatusCode = 200;
 });

@@ -1,8 +1,78 @@
-﻿<form method="post" action="@htmx_kitchensink.Partials.WorkItem.NewController.PostLink(Url)"
-      data-ajax="true"
-      data-ajax-success="newWorkItemCreated"
-      data-ajax-failure="newWorkItemFailed">
-    <label>What is your name?</label>
-    <input name="Name" type="text" />
-    <input type="submit" value="Submit" />
-</form>
+﻿@model htmx_kitchensink.Partials.WorkItem.NewPartial
+
+
+<div id="new-workitem-form-container">
+    <style>
+        /* Define the fade-out animation */
+        @@keyframes fadeOut {
+            0% {
+                opacity: 1; /* Fully visible */
+            }
+
+            100% {
+                opacity: 0; /* Fully transparent */
+            }
+        }
+
+        /* Apply the fade-out animation to the alert */
+        .fade-out {
+            animation: fadeOut 2s ease-out .5s forwards; /* 3s delay before fade out, lasts 1s */
+        }
+
+        .alert {
+            margin-left: 20px; /* Space between the alert and the button */
+            align-self: center;
+        }
+
+        /* Make the form and its elements flexible */
+        .form-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            border: 1px solid #ccc;
+            position: relative;
+        }
+
+        .submit-alert {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <form hx-post="@htmx_kitchensink.Partials.WorkItem.NewController.PostLink(Url)"
+          hx-swap="outerHTML">
+
+        <h2>Create a new work item</h2>
+        <h5>@DateTime.UtcNow.ToLocalTime()</h5>
+
+        <label for="Model.Title">Title</label>
+        <input id="Model.Title" name="Model.Title" class="form-control" />
+
+        <label for="Model.Description">Description</label>
+        <input id="Model.Description" name="Model.Description" class="form-control" />
+
+        <!-- Wrap submit button and alert in a flex container -->
+        <div class="submit-alert">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+
+            @if (Context.Response.StatusCode == StatusCodes.Status201Created)
+            {
+                if (Model.Config.ShowSuccessToastMessage)
+                {
+                    <div class="alert alert-success fade-out">
+                        Created successfully!
+                    </div>
+                }
+            }
+            else if (Context.Response.StatusCode == StatusCodes.Status422UnprocessableEntity || Context.Response.StatusCode == StatusCodes.Status400BadRequest)
+            {
+                <div class="alert alert-danger fade-out">We found some issues with your form. Please review and resolve them.</div>
+            }
+        </div>
+    </form>
+</div>
